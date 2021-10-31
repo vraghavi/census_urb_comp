@@ -77,6 +77,18 @@ def preprocessing(dt):
     dt = dt.drop(['VendorID','tip_amount','ehail_fee','lpep_pickup_datetime','lpep_dropoff_datetime'],axis=1)
     return dt
 
+def preprocessing_census(dt):
+    #remove junk column
+    dt['income >50K'] = np.nan
+    dt['income >50K'][dt['salary']=='<=50K'] = 0
+    dt['income >50K'][dt['salary']=='>50K'] = 1
+    dt1 = dt[['age','workclass','education-num','occupation','hours-per-week','income >50K']]
+    # dt1['income >50K'] = np.nan
+    # dt1['income >50K'][dt1['salary']=='<=50K'] = 0
+    # dt1['income >50K'][dt1['salary']=='>50K'] = 1
+    
+    return dt1
+
 def run_classifier(model,x_train,y_train,x_test):
     model.fit(x_train,y_train)
     y_pred = model.predict(x_test)
